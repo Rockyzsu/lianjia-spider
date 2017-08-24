@@ -6,7 +6,8 @@ from lianjia.items import LianjiaItem
 class Lianjia_Spider(scrapy.Spider):
     name='lianjia'
     allowed_domains=['m.lianjia.com']
-    start_urls=['']
+    start_urls=['https://m.lianjia.com/sz',]
+
     def parse(self, response):
         for i in range(1,10):
             url='https://m.lianjia.com/sz/xiaoqu/pg%d/?_t=1'  %i
@@ -21,12 +22,18 @@ class Lianjia_Spider(scrapy.Spider):
         for node in nodes:
             items = LianjiaItem()
             name = node.xpath('.//div[@class="item_list"]/div[@class="item_main"]/text()')[0]
+            print name
             items['name'] = name
             desc = node.xpath('.//div[@class="item_list"]/div[@class="item_other text_cut"]/text()')[0]
+
             details = desc.split()
             items['location'] = details[0]
+            print details[0]
             items['building_type'] = details[1]
+            print details[1]
             items['building_date'] = details[2]
+            print details[2]
             price = node.xpath('.//div[@class="item_list"]/div[@class="item_minor"]/span/em/text()')[0]
             items['price'] = price
+            print price
             yield items
