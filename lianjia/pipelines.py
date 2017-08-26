@@ -5,15 +5,15 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 from pymongo import MongoClient
-from lianjia import settings
+from scrapy.conf import settings
 from scrapy.exceptions import DropItem
 class LianjiaPipeline(object):
     def __init__(self):
-        client=MongoClient('localhost',
-            27017)
+        client=MongoClient(settings['MONGODB_SERVER'],
+                           settings['MONGODB_PORT'])
 
-        db=client['test']
-        self.collection=db['houseinfo']
+        db=client[settings['MONGODB_DB']]
+        self.collection=db[settings['MONGODB_COLLECTION']]
     def process_item(self, item, spider):
         valid=True
         for data in item:
@@ -21,6 +21,7 @@ class LianjiaPipeline(object):
                 valid=False
                 raise DropItem("missing")
         if valid:
+            print 'detail of items', dict(item)
             self.collection.insert(dict(item))
             print "Update in DB"
         return item

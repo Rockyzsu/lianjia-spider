@@ -12,7 +12,11 @@ class LianjiaItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     name=scrapy.Field()
+    city_name = scrapy.Field()
+    price = scrapy.Field()
     location=scrapy.Field()
     building_type=scrapy.Field()
     building_date=scrapy.Field()
-    price = scrapy.Field()
+    xiaoqu_link = scrapy.Field()
+    scrapy_date = scrapy.Field()
+    origin = scrapy.Field()
