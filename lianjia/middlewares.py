@@ -4,7 +4,8 @@
 #
 # See documentation in:
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
-
+import base64
+from spiders.mayi_proxy_header import mayiproxy
 from scrapy import signals
 
 
@@ -54,3 +55,17 @@ class LianjiaSpiderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+class ProxyMiddleware(object):
+    # overwrite process request
+    def process_request(self, request, spider):
+        # Set the location of the proxy
+        proxy_host,auther_user=mayiproxy()
+        request.meta['proxy'] = proxy_host
+
+        # Use the following lines if your proxy requires authentication
+        #proxy_user_pass = "USERNAME:PASSWORD"
+        # setup basic authentication for the proxy
+        #encoded_user_pass = base64.encodestring(proxy_user_pass)
+        request.headers['Proxy-Authorization'] = auther_user

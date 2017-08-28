@@ -21,7 +21,7 @@ NEWSPIDER_MODULE = 'lianjia.spiders'
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 4
+CONCURRENT_REQUESTS = 2
 
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
@@ -80,8 +80,9 @@ ITEM_PIPELINES = {
 }
 MONGODB_SERVER = 'localhost'
 MONGODB_PORT = 27017
-MONGODB_DB = 'test'
-MONGODB_COLLECTION = 'dummy'
+MONGODB_DB = 'house'
+MONGODB_COLLECTION = 'dummy4'
+
 REDISDB_SERVER = 'localhost'
 REDISDB_PORT = 6379
 REDISDB_DB = 'test'
@@ -106,3 +107,7 @@ REDISDB_COLLECTION = 'houseinfo'
 # HTTPCACHE_DIR = 'httpcache'
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': 110,
+    'lianjia.middlewares.ProxyMiddleware': 100,
+}

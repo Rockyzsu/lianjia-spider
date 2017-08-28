@@ -1,24 +1,29 @@
 # coding: utf-8
 import json
 import re
-
+import requests
 import datetime
 from lxml import etree
 import scrapy
 from lianjia.items import LianjiaItem
+from lianjia.spiders.fetch_info import get_city_link
+from lianjia.spiders.mayi_proxy_header import mayiproxy
 class Lianjia_Spider(scrapy.Spider):
     name='lianjia'
     allowed_domains=['m.lianjia.com']
-    start_urls=['https://m.lianjia.com/hz/xiaoqu/pg1/?_t=1',
-                ]
-    date=datetime.datetime.now().strftime('%Y-%m-%d')
+    #start_urls=['https://m.lianjia.com/hz/xiaoqu/pg1/?_t=1',]
+
     '''
     def start_requests(self):
         url='https://m.lianjia.com/hz/xiaoqu/pg1/?_t=1'
     '''
     def __init__(self):
-        self.date=datetime.datetime.now().strftime('%Y-%m-%d')
-        self.header= {
+        self.date = datetime.date.today()
+        with open('lianjia_cookie.txt','r') as fp:
+            self.cookie=fp.read().strip()
+
+        self.mayi_proxy, self.authHeader=mayiproxy()
+        self.headers= {
             'Host': 'm.lianjia.com',
             'Cache-Control': 'no-cache',
             'Connection': 'keep-alive',
@@ -30,27 +35,46 @@ class Lianjia_Spider(scrapy.Spider):
             #'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36',
             'User-Agent': 'UCWEB/2.0 (Linux; U; Adr 2.3; zh-CN; MI-ONEPlus) U2/1.0.0 UCBrowser/8.6.0.199 U2/1.0.0 Mobile',
             'X-Requested-With': 'XMLHttpRequest',
-            'Cookie': 'lianjia_uuid=bd5695e2-e708-40ed-a422-bd7735eb0913; UM_distinctid=15dca9b5775ed-0270ab60593b6d-791238-1fa400-15dca9b5776535; _jzqy=1.1502342765.1503554600.1.jzqsr=baidu|jzqct=%E9%93%BE%E5%AE%B6.-; lj-ss=040f750f334914ad3f62a65590f5df64; lj-api=eb773d00ac95736a80cb663e13368872; sample_traffic_test=guide_card; select_nation=1; _jzqckmp=1; _smt_uid=5993d85d.c78ffd9; _jzqa=1.1287000182441332700.1502861406.1503645894.1503648405.6; _jzqc=1; _jzqx=1.1503558036.1503648405.2.jzqsr=sz%2Elianjia%2Ecom|jzqct=/ershoufang/.jzqsr=captcha%2Elianjia%2Ecom|jzqct=/; select_city=440100; CNZZDATA1253491255=2028382610-1503555874-%7C1503645723; _ga=GA1.2.154142580.1502861407; _gid=GA1.2.332017260.1503554602; _gat=1; _gat_past=1; _gat_new=1; _gat_global=1; _gat_new_global=1; CNZZDATA1254525948=292510229-1503555399-%7C1503650077; Hm_lvt_9152f8221cb6243a53c83b956842be8a=1502861405,1503378424,1503554600; Hm_lpvt_9152f8221cb6243a53c83b956842be8a=1503650375; lianjia_ssid=0293b735-bdd1-41dc-b933-052e24413aec'
+            'Proxy-Authorization': self.authHeader
         }
+        self.city_link=get_city_link()
+        self.city_count=self.getXiaoquCount()
 
-    def getTotalCount(self,url):
+    def start_requests(self):
+        for city in self.city_link:
+            yield scrapy.Request(url=city,headers=self.headers,meta={'proxy':self.mayi_proxy})
 
+    # 获取城市的小区数目
+    def getXiaoquCount(self):
+        city_count={}
+        for city in self.city_link:
+            print city
+            city_code=city.split('/')[3]
+            request_url = city+'xiaoqu/pg1/?_t=1'
+            r=requests.get(url=request_url,headers=self.headers)
+            print r
+            xiaoqu_count = re.findall(r'\\"total\\":(\d+)}', r.text)[0]
+            print "xiaoqu count",xiaoqu_count
+            city_count[city_code]=int(xiaoqu_count)
+        return city_count
 
     def parse(self, response):
+        city_url=response.url
+        xiaoqu_count=city_url.split('/')[3]
+        count=self.city_count[xiaoqu_count]
+        pages=count/25+1
 
-
-        for i in range(1,5):
-            url='https://m.lianjia.com/sz/xiaoqu/pg%d/?_t=1'  %i
-            yield scrapy.Request(url=url,headers=self.header,callback=self.parse_body)
+        for i in range(1,pages):
+            url=city_url+'xiaoqu/pg%d/?_t=1'  %i
+            yield scrapy.Request(url=url,headers=self.headers,meta={'proxy':self.mayi_proxy},callback=self.parse_body)
 
     def parse_body(self,response):
-        #date = datetime.datetime.now().strftime('%Y-%m-%d')
-        #temp=date
-        date=self.date
+        #date=self.date
+        # 如何转换python datetime 到mongodb ？
         # response is json string
+        date=datetime.datetime.now().strftime("%Y-%m-%d")
         js = json.loads(response.body)
         body = js['body']
-        #city_name=js['args']['cur_city_name']
         p = re.compile('"cur_city_name":"(.*?)"')
         city_name = p.findall(js['args'])[0].decode('unicode_escape')
         tree = etree.HTML(body)
