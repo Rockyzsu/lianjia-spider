@@ -42,7 +42,8 @@ class Lianjia_Spider(scrapy.Spider):
         #self.city_link=get_city_link()
         #self.city_count=self.getXiaoquCount()
         #self.cookie=settings['cookie']
-        self.cookie={'_gat_new_global': '1', 'lj-ss': '5bd2bc45dbdf0644d704777dc2075366', '_gat_global': '1', '_gat_new': '1', 'Hm_lpvt_9152f8221cb6243a53c83b956842be8a': '1503912523', '_gat_past': '1', '_ga': 'GA1.2.331020171.1503638699', '_gat': '1', 'CNZZDATA1254525948': '145009446-1503633660-%7C1503908541', 'lianjia_ssid': '290ce12b-c434-4782-9b1a-06c450c2dbb3', 'select_nation': '1', '_gid': 'GA1.2.2040440312.1503909104', 'CNZZDATA1253491255': '851767322-1503638199-%7C1503907203', 'lianjia_uuid': 'c6a7836e-cf96-45ae-96e5-6fdb2def9fb7', 'UM_distinctid': '15e17d9bbf960c-08e33a5d4e4891-4d015463-1fa400-15e17d9bbfa300', 'select_city': '440300', 'Hm_lvt_9152f8221cb6243a53c83b956842be8a': '1503638699'}
+        #self.cookie={'_gat_new_global': '1', 'lj-ss': '5bd2bc45dbdf0644d704777dc2075366', '_gat_global': '1', '_gat_new': '1', 'Hm_lpvt_9152f8221cb6243a53c83b956842be8a': '1503912523', '_gat_past': '1', '_ga': 'GA1.2.331020171.1503638699', '_gat': '1', 'CNZZDATA1254525948': '145009446-1503633660-%7C1503908541', 'lianjia_ssid': '290ce12b-c434-4782-9b1a-06c450c2dbb3', 'select_nation': '1', '_gid': 'GA1.2.2040440312.1503909104', 'CNZZDATA1253491255': '851767322-1503638199-%7C1503907203', 'lianjia_uuid': 'c6a7836e-cf96-45ae-96e5-6fdb2def9fb7', 'UM_distinctid': '15e17d9bbf960c-08e33a5d4e4891-4d015463-1fa400-15e17d9bbfa300', 'select_city': '440300', 'Hm_lvt_9152f8221cb6243a53c83b956842be8a': '1503638699'}
+        self.cookie={'_gat_new_global': '1', 'lj-ss': '5bd2bc45dbdf0644d704777dc2075366', '_gat_global': '1', '_gat_new': '1', 'Hm_lpvt_9152f8221cb6243a53c83b956842be8a': '1503920035', '_gat_past': '1', '_ga': 'GA1.2.331020171.1503638699', '_gat': '1', 'CNZZDATA1254525948': '145009446-1503633660-%7C1503919341', 'lianjia_ssid': 'e07f3016-cad2-4f82-96f5-516af563669e', 'select_nation': '1', '_gid': 'GA1.2.2040440312.1503909104', 'CNZZDATA1253491255': '851767322-1503638199-%7C1503914876', 'lianjia_uuid': 'c6a7836e-cf96-45ae-96e5-6fdb2def9fb7', 'UM_distinctid': '15e17d9bbf960c-08e33a5d4e4891-4d015463-1fa400-15e17d9bbfa300', 'select_city': '441900', 'Hm_lvt_9152f8221cb6243a53c83b956842be8a': '1503638699'}
 
         self.meta = {
             'dont_redirect': True,  # 禁止网页重定向
@@ -78,7 +79,7 @@ class Lianjia_Spider(scrapy.Spider):
         count=1032
         pages=(count+25)/25
 
-        for i in range(1,pages):
+        for i in range(2,pages):
             url=city_url+'/pg%d/?_t=1'  %i
             yield scrapy.Request(url=url,callback=self.parse_body,headers=self.headers,cookies=self.cookie)
 

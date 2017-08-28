@@ -83,7 +83,7 @@ ITEM_PIPELINES = {
 MONGODB_SERVER = 'localhost'
 MONGODB_PORT = 27017
 MONGODB_DB = 'house'
-MONGODB_COLLECTION = 'houseinfo_data'
+MONGODB_COLLECTION = 'houseinfo_data_dg'
 
 REDISDB_SERVER = 'localhost'
 REDISDB_PORT = 6379
