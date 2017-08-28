@@ -11,8 +11,8 @@ def mayiproxy():
     mayi_port = '8123'
 
     # 蚂蚁代理服务器地址
-    #mayi_proxy = {'http': 'http://{}:{}'.format(mayi_url, mayi_port)}
-    mayi_proxy = 'http://{}:{}'.format(mayi_url, mayi_port)
+    mayi_proxy = {'http': 'http://{}:{}'.format(mayi_url, mayi_port)}
+    #mayi_proxy = 'http://{}:{}'.format(mayi_url, mayi_port)
     timesp = '{}'.format(time.strftime("%Y-%m-%d %H:%M:%S"))
     codes = app_secret + 'app_key' + my_app_key + 'timestamp' + timesp + app_secret
     sign = hashlib.md5(codes.encode('utf-8')).hexdigest().upper()

@@ -17,9 +17,11 @@ class LianjiaPipeline(object):
     def process_item(self, item, spider):
         valid=True
         for data in item:
+            '''
             if not data:
                 valid=False
                 raise DropItem("missing")
+            '''
         if valid:
             print 'detail of items', dict(item)
             self.collection.insert(dict(item))

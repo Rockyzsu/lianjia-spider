@@ -56,7 +56,7 @@ class LianjiaSpiderMiddleware(object):
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
 
-
+'''
 class ProxyMiddleware(object):
     # overwrite process request
     def process_request(self, request, spider):
@@ -69,3 +69,4 @@ class ProxyMiddleware(object):
         # setup basic authentication for the proxy
         #encoded_user_pass = base64.encodestring(proxy_user_pass)
         request.headers['Proxy-Authorization'] = auther_user
+'''
