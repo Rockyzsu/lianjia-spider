@@ -21,7 +21,7 @@ NEWSPIDER_MODULE = 'lianjia.spiders'
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 2
+# CONCURRENT_REQUESTS = 2
 
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
@@ -32,14 +32,14 @@ ROBOTSTXT_OBEY = False
 # CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-#COOKIES_ENABLED = True
+# COOKIES_ENABLED = True
 
 # Disable Telnet Console (enabled by default)
 # TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
 
-#DEFAULT_REQUEST_HEADERS = {
+# DEFAULT_REQUEST_HEADERS = {
 #    'Host': 'm.lianjia.com',
 #    'Cache-Control':'no-cache',
 #    'Connection':'keep-alive',
@@ -52,11 +52,11 @@ ROBOTSTXT_OBEY = False
 #    # 'User-Agent': 'UCWEB/2.0 (Linux; U; Adr 2.3; zh-CN; MI-ONEPlus) U2/1.0.0 UCBrowser/8.6.0.199 U2/1.0.0 Mobile',
 #    'X-Requested-With': 'XMLHttpRequest',
 #    'Cookie': 'lianjia_uuid=bd5695e2-e708-40ed-a422-bd7735eb0913; UM_distinctid=15dca9b5775ed-0270ab60593b6d-791238-1fa400-15dca9b5776535; _jzqy=1.1502342765.1503554600.1.jzqsr=baidu|jzqct=%E9%93%BE%E5%AE%B6.-; lj-ss=040f750f334914ad3f62a65590f5df64; lj-api=eb773d00ac95736a80cb663e13368872; sample_traffic_test=guide_card; select_nation=1; _jzqckmp=1; _smt_uid=5993d85d.c78ffd9; _jzqa=1.1287000182441332700.1502861406.1503645894.1503648405.6; _jzqc=1; _jzqx=1.1503558036.1503648405.2.jzqsr=sz%2Elianjia%2Ecom|jzqct=/ershoufang/.jzqsr=captcha%2Elianjia%2Ecom|jzqct=/; select_city=440100; CNZZDATA1253491255=2028382610-1503555874-%7C1503645723; _ga=GA1.2.154142580.1502861407; _gid=GA1.2.332017260.1503554602; _gat=1; _gat_past=1; _gat_new=1; _gat_global=1; _gat_new_global=1; CNZZDATA1254525948=292510229-1503555399-%7C1503650077; Hm_lvt_9152f8221cb6243a53c83b956842be8a=1502861405,1503378424,1503554600; Hm_lpvt_9152f8221cb6243a53c83b956842be8a=1503650375; lianjia_ssid=0293b735-bdd1-41dc-b933-052e24413aec'
-#}
-#DEFAULT_REQUEST_HEADERS = {
+# }
+# DEFAULT_REQUEST_HEADERS = {
 #   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 #   'Accept-Language': 'en',
-#}
+# }
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 # SPIDER_MIDDLEWARES = {
@@ -83,7 +83,7 @@ ITEM_PIPELINES = {
 MONGODB_SERVER = 'localhost'
 MONGODB_PORT = 27017
 MONGODB_DB = 'house'
-MONGODB_COLLECTION = 'houseinfo_data_dg'
+MONGODB_COLLECTION = 'houseinfo_new_temp'
 
 REDISDB_SERVER = 'localhost'
 REDISDB_PORT = 6379
@@ -110,7 +110,7 @@ REDISDB_COLLECTION = 'houseinfo'
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-#DOWNLOADER_MIDDLEWARES = {
+# DOWNLOADER_MIDDLEWARES = {
 #  'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': 110,
 #   'lianjia.middlewares.ProxyMiddleware': 100,
-#}
+# }

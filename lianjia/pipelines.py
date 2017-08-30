@@ -23,7 +23,7 @@ class LianjiaPipeline(object):
                 raise DropItem("missing")
             '''
         if valid:
-            print 'detail of items', dict(item)
+            #print 'detail of items', dict(item)
             self.collection.insert(dict(item))
-            print "Update in DB"
+            #print "Update in DB"
         return item
