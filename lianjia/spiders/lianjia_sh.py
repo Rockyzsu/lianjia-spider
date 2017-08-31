@@ -89,8 +89,8 @@ class Lianjia_Spider(scrapy.Spider):
         #count=100
         pages=(1345+25)/25
 
-        for i in range(0,27474,20):
-            url='http://soa.dooioo.com/api/v4/online/house/xiaoqu/search?access_token=7poanTTBCymmgE0FOn1oKp&channel=xiaoqu&cityCode=sh&client=wap&limit_count=20&limit_offset=%d' %i
+        for i in range(0,10000,20):
+            url='http://soa.dooioo.com/api/v4/online/house/xiaoqu/search?access_token=7poanTTBCymmgE0FOn1oKp&channel=xiaoqu&cityCode=sz&client=wap&limit_count=20&limit_offset=%d' %i
             yield scrapy.Request(url=url,callback=self.parse_body,headers=self.headers)
 
     def parse_body(self,response):
@@ -98,7 +98,7 @@ class Lianjia_Spider(scrapy.Spider):
         # 如何转换python datetime 到mongodb ？
         # response is json string
         print response.url
-        city_name='上海'
+        city_name='深圳'
         js = json.loads(response.body)
         body = js['data']['list']
         print "len of body" , len(body)

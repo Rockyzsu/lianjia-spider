@@ -21,7 +21,7 @@ NEWSPIDER_MODULE = 'lianjia.spiders'
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-# CONCURRENT_REQUESTS = 2
+CONCURRENT_REQUESTS = 2
 
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
@@ -32,7 +32,7 @@ ROBOTSTXT_OBEY = False
 # CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-# COOKIES_ENABLED = True
+COOKIES_ENABLED = True
 
 # Disable Telnet Console (enabled by default)
 # TELNETCONSOLE_ENABLED = False
@@ -83,7 +83,7 @@ ITEM_PIPELINES = {
 MONGODB_SERVER = 'localhost'
 MONGODB_PORT = 27017
 MONGODB_DB = 'house'
-MONGODB_COLLECTION = 'houseinfo_new_temp'
+MONGODB_COLLECTION = 'houseinfo_test'
 
 REDISDB_SERVER = 'localhost'
 REDISDB_PORT = 6379
