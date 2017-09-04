@@ -10,17 +10,18 @@ from scrapy.conf import settings
 from lianjia.spiders.fetch_info import get_city_link, fetch_cookie, getXiaoquCount
 from lianjia.spiders.mayi_proxy_header import mayiproxy
 
+
 class Lianjia_Spider(scrapy.Spider):
-    name = 'lianjia_web'
+    name = 'lianjia_web_su'
     allowed_domains = ['lianjia.com']
 
     def __init__(self):
         self.date = datetime.date.today()
         # self.mayi_proxy, self.authHeader=mayiproxy()
         # 页面结构不同的有 北京 天津
-        self.city = 'lf'
-        self.city_name = '廊坊'
-        self.city_count = 736
+        self.city = 'su'
+        self.city_name = '苏州'
+        self.city_count = 3348
         self.headers = {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
                         'Accept-Encoding': 'gzip, deflate, sdch',
                         'Accept-Language': 'zh-CN,zh;q=0.8',
@@ -29,7 +30,7 @@ class Lianjia_Spider(scrapy.Spider):
                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.221 Safari/537.36 SE 2.X MetaSr 1.0'
                         }
 
-        self.headers['Host'] = '%s.lianjia.com' %self.city
+        self.headers['Host'] = '%s.lianjia.com' % self.city
         self.cookie = {'ubt_load_interval_b': '1504165854069', 'all-lj': '6341ae6e32895385b04aae0cf3d794b0',
                        '_jzqa': '1.1378702697002941000.1504062784.1504162491.1504164572.7', '_jzqc': '1',
                        '_jzqb': '1.20.10.1504164572.1', '_qzjto': '16.4.0',
@@ -64,13 +65,12 @@ class Lianjia_Spider(scrapy.Spider):
         start_url = 'https://%s.lianjia.com/xiaoqu/' % self.city
         yield scrapy.Request(url=start_url, headers=self.headers, cookies=self.cookie)
 
-
-
     def parse(self, response):
 
-        pages = (self.city_count + 31) / 30
+        pages = (self.city_count +21) / 20
         for i in range(1, pages + 3):
-            url = 'https://%s.lianjia.com/xiaoqu/pg%dcro21/' % (self.city,i)
+            url = 'https://%s.lianjia.com/xiaoqu/d%ds11' % (self.city, i)
+
             print url
             self.headers['Referer'] = url
             yield scrapy.Request(url=url, callback=self.parse_body, headers=self.headers, cookies=self.cookie)
@@ -81,14 +81,14 @@ class Lianjia_Spider(scrapy.Spider):
         city_name = self.city_name
         content = response.body
         tree = etree.HTML(content)
-        nodes = tree.xpath('//ul[@class="listContent"]/li')
+        nodes = tree.xpath('//ul[@class="house-lst"]/li')
         print  "len : ", len(nodes)
         for node in nodes:
             items = LianjiaItem()
-            name = node.xpath('.//div[@class="title"]/a/text()')[0]
+            name = node.xpath('.//div[@class="info-panel"]/h2/a/text()')[0]
             items['name'] = name
             try:
-                position = node.xpath('.//div[@class="positionInfo"]/a/text()')
+                position = node.xpath('.//div[@class="con"]/a/text()')
                 address = position[0] + position[1]
             except:
                 address = 'NA'
@@ -96,31 +96,36 @@ class Lianjia_Spider(scrapy.Spider):
             items['location'] = address
             items['city_name'] = city_name
             try:
-                text_content = node.xpath('.//div[@class="positionInfo"]/text()')
+                text_content = node.xpath('.//div[@class="con"]/text()')
+                building_date=text_content[3].strip()
+                building_type='NA'
                 # print len(build_date)
-
+                '''
                 detail = text_content[3].split('/')
                 # 除去北京，北京的页面会多一个小区结构
-                building_date = detail[1].strip()
-                building_type = "NA"
-                '''
+                building_date = detail[-1].strip()
+                building_type = detail[1].strip()
+                if len(building_type)==0:
+                    building_type='未知年建成'
+                
                 for k, i in enumerate(detail):
                     print k, i
-                
+
                 if len(detail) == 4:
                     buiding_type = detail[1].strip() + detail[3].strip()
                     build_date = detail[3].strip()
                 elif len(detail) == 3:
                     buiding_type = detail[1].strip()
-                
+
                     build_date = detail[2].strip()
                 '''
             except:
                 building_date = '未知年建成'
+                building_type='NA'
             items['building_date'] = building_date
             items['building_type'] = building_type
             # details = desc.split()
-            price_t = node.xpath('.//div[@class="totalPrice"]/span/text()')[0]
+            price_t = node.xpath('.//div[@class="price"]/span/text()')[0].strip()
 
             p = re.findall('\d+', price_t)
             if len(p) != 0:
@@ -135,7 +140,7 @@ class Lianjia_Spider(scrapy.Spider):
             items['price'] = price_dict
             yield items
 
-    #北京的页面元素较多
+    # 北京的页面元素较多
     def parse_body_bj(self, response):
 
         print response.url
