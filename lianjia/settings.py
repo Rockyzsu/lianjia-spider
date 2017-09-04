@@ -79,16 +79,24 @@ COOKIES_ENABLED = True
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'lianjia.pipelines.LianjiaPipeline': 300,
+    #'lianjia.pipelines.MySQLStoreHouse':300,
 }
+# mangodb
 MONGODB_SERVER = 'localhost'
 MONGODB_PORT = 27017
 MONGODB_DB = 'house'
-MONGODB_COLLECTION = 'houseinfo_test'
-
+MONGODB_COLLECTION = 'houseinfo_xx'
+# redis server
 REDISDB_SERVER = 'localhost'
 REDISDB_PORT = 6379
 REDISDB_DB = 'test'
 REDISDB_COLLECTION = 'houseinfo'
+#mysql server
+MYSQL_HOST = 'localhost'
+MYSQL_DBNAME = 'hosue5'
+MYSQL_USER = 'root'
+MYSQL_PASSWD = '123456z'
+MYSQL_PORT = 3306
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
 # AUTOTHROTTLE_ENABLED = True

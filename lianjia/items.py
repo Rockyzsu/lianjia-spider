@@ -18,5 +18,6 @@ class LianjiaItem(scrapy.Item):
     building_type=scrapy.Field()
     building_date=scrapy.Field()
     #xiaoqu_link = scrapy.Field()
+
     #scrapy_date = scrapy.Field()
     #origin = scrapy.Field()
