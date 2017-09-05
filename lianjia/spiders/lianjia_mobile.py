@@ -6,18 +6,22 @@ from lxml import etree
 import scrapy
 from lianjia.items import LianjiaItem
 
-class Lianjia_Spider(scrapy.Spider):
+class Lianjia_Spider_Mobile(scrapy.Spider):
     name = 'lianjia_m'
     allowed_domains = ['m.lianjia.com']
 
     def __init__(self,city=None,*args, **kwargs):
-        super(Lianjia_Spider).__init__(,self,*args, **kwargs)
+        super(Lianjia_Spider_Mobile,self).__init__(*args, **kwargs)
         self.city = city
 
         self.start_urls=['https://m.lianjia.com/%s/xiaoqu/pg1/?_t=1' %self.city]
 
-        self.crawl_date = datetime.date.today()
+        self.crawl_date = datetime.datetime.now().strftime('%Y-%m-%d')
 
+        with open('citys_count.txt', 'r') as fp_city_count:
+            citys_count = json.load(fp_city_count)
+
+        self.xiaoqu_count = citys_count[self.city]
         self.headers = {
             'Host': 'm.lianjia.com',
             'Cache-Control': 'no-cache',
@@ -29,34 +33,19 @@ class Lianjia_Spider(scrapy.Spider):
             'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36',
             'X-Requested-With': 'XMLHttpRequest'
         }
-        self.cookie={'_jzqa': '1.206544328628398600.1503881786.1503881786.1503881786.1', 'lj-ss': '1e5c8b6bb356c2aabadd162c97341948', 'lianjia_ssid': '9410766c-34bd-4115-a879-5b11375f9924', 'Hm_lpvt_9152f8221cb6243a53c83b956842be8a': '1504102362', '_ga': 'GA1.2.885541457.1503837305', 'ubta': '3154866423.1593962235.1503840667336.1503845425552.1503845426709.19', 'CNZZDATA1254525948': '1758800946-1503835682-%7C1504098054', '_smt_uid': '59a36a39.a7e32ae', 'select_nation': '1', '_gid': 'GA1.2.726828377.1504101487', 'CNZZDATA1253491255': '597282999-1503832971-%7C1504101820', 'gr_user_id': '9895cc06-d162-4985-b42c-0cc98cdee98f', '__xsptplus696': '696.2.1503843548.1503845425.16%234%7C%7C%7C%7C%7C%23%237HfP43631brEPPGQ4VLVKcfdTX7U_iad%23', 'lianjia_uuid': 'ca5a64ec-9cbe-4f31-8499-f06c3ea622da', 'UM_distinctid': '15e23b039a53a7-0b6a06eff463b1-5c153d17-1fa400-15e23b039a68d1', 'select_city': '441300', 'Hm_lvt_9152f8221cb6243a53c83b956842be8a': '1503837305,1503881786,1504101487'}
+        #self.cookie={'_jzqa': '1.206544328628398600.1503881786.1503881786.1503881786.1', 'lj-ss': '1e5c8b6bb356c2aabadd162c97341948', 'lianjia_ssid': '9410766c-34bd-4115-a879-5b11375f9924', 'Hm_lpvt_9152f8221cb6243a53c83b956842be8a': '1504102362', '_ga': 'GA1.2.885541457.1503837305', 'ubta': '3154866423.1593962235.1503840667336.1503845425552.1503845426709.19', 'CNZZDATA1254525948': '1758800946-1503835682-%7C1504098054', '_smt_uid': '59a36a39.a7e32ae', 'select_nation': '1', '_gid': 'GA1.2.726828377.1504101487', 'CNZZDATA1253491255': '597282999-1503832971-%7C1504101820', 'gr_user_id': '9895cc06-d162-4985-b42c-0cc98cdee98f', '__xsptplus696': '696.2.1503843548.1503845425.16%234%7C%7C%7C%7C%7C%23%237HfP43631brEPPGQ4VLVKcfdTX7U_iad%23', 'lianjia_uuid': 'ca5a64ec-9cbe-4f31-8499-f06c3ea622da', 'UM_distinctid': '15e23b039a53a7-0b6a06eff463b1-5c153d17-1fa400-15e23b039a68d1', 'select_city': '441300', 'Hm_lvt_9152f8221cb6243a53c83b956842be8a': '1503837305,1503881786,1504101487'}
+        self.cookie={'lianjia_uuid': 'ca5a64ec-9cbe-4f31-8499-f06c3ea622da', '_gat_new': '1', '_jzqa': '1.206544328628398600.1503881786.1503881786.1503881786.1', 'lj-ss': '1e5c8b6bb356c2aabadd162c97341948', 'Hm_lpvt_9152f8221cb6243a53c83b956842be8a': '1504542040', '_gat': '1', '_smt_uid': '59a36a39.a7e32ae', 'CNZZDATA1253491255': '597282999-1503832971-%7C1504541193', 'gr_user_id': '9895cc06-d162-4985-b42c-0cc98cdee98f', 'ubt_load_interval_b': '1504537420276', '_gat_past': '1', '_ga': 'GA1.2.885541457.1503837305', 'CNZZDATA1254525948': '1758800946-1503835682-%7C1504541662', 'select_nation': '1', 'UM_distinctid': '15e23b039a53a7-0b6a06eff463b1-5c153d17-1fa400-15e23b039a68d1', 'select_city': '440300', '_gat_new_global': '1', 'lianjia_ssid': 'c76950fe-ad1d-43b6-9dbd-825dc40fc561', 'ubtd': '4', 'ubta': '3154866423.1593962235.1503840667336.1504537420288.1504537421470.26', 'ubtc': '3154866423.1593962235.1504537421471.54A8769FA2903B4254B688736A67011F', '_gid': 'GA1.2.893652375.1504537910', '__xsptplus696': '696.5.1504537420.1504537420.1%234%7C%7C%7C%7C%7C%23%23Dyu9Xh4KKNw0aqvAFjtibtSfVngPI3dg%23', '_gat_global': '1', 'Hm_lvt_9152f8221cb6243a53c83b956842be8a': '1503881786,1504101487,1504454486,1504537910'}
+
         self.price_month = '2017-07'
 
-    '''
-    # 获取城市的小区数目
-    def getXiaoquCount(self):
-        city_count={}
-        for city in self.city_link:
-            print city
-            city_code=city.split('/')[3]
-            request_url = city+'xiaoqu/pg1/?_t=1'
-            r=requests.get(url=request_url,headers=self.headers)
-            print r
-            xiaoqu_count = re.findall(r'\\"total\\":(\d+)}', r.text)[0]
-            print "xiaoqu count",xiaoqu_count
-            city_count[city_code]=int(xiaoqu_count)
-        return city_count
-    '''
 
     def parse(self, response):
-        pages = (4833 + 25) / 25
+        pages = (self.xiaoqu_count + 25) / 25
 
         for i in range(1, pages+1):
             base_url='https://m.lianjia.com/%s/xiaoqu/pg%d/' %(self.city,i)
             url = base_url+'?_t=1'
-            print "xiaoqu link ", url
             self.headers['Referer']=base_url
-            print self.headers
             yield scrapy.Request(url=url, callback=self.parse_body, headers=self.headers,cookies=self.cookie)
 
     def parse_body(self, response):

@@ -10,6 +10,7 @@ from scrapy.conf import settings
 from lianjia.spiders.fetch_info import get_city_link, fetch_cookie, getXiaoquCount
 from lianjia.spiders.mayi_proxy_header import mayiproxy
 
+
 class Lianjia_Spider(scrapy.Spider):
     name = 'lianjia_web'
     allowed_domains = ['lianjia.com']
@@ -29,7 +30,7 @@ class Lianjia_Spider(scrapy.Spider):
                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.221 Safari/537.36 SE 2.X MetaSr 1.0'
                         }
 
-        self.headers['Host'] = '%s.lianjia.com' %self.city
+        self.headers['Host'] = '%s.lianjia.com' % self.city
         self.cookie = {'ubt_load_interval_b': '1504165854069', 'all-lj': '6341ae6e32895385b04aae0cf3d794b0',
                        '_jzqa': '1.1378702697002941000.1504062784.1504162491.1504164572.7', '_jzqc': '1',
                        '_jzqb': '1.20.10.1504164572.1', '_qzjto': '16.4.0',
@@ -64,13 +65,11 @@ class Lianjia_Spider(scrapy.Spider):
         start_url = 'https://%s.lianjia.com/xiaoqu/' % self.city
         yield scrapy.Request(url=start_url, headers=self.headers, cookies=self.cookie)
 
-
-
     def parse(self, response):
 
         pages = (self.city_count + 31) / 30
         for i in range(1, pages + 3):
-            url = 'https://%s.lianjia.com/xiaoqu/pg%dcro21/' % (self.city,i)
+            url = 'https://%s.lianjia.com/xiaoqu/pg%dcro21/' % (self.city, i)
             print url
             self.headers['Referer'] = url
             yield scrapy.Request(url=url, callback=self.parse_body, headers=self.headers, cookies=self.cookie)
@@ -135,7 +134,7 @@ class Lianjia_Spider(scrapy.Spider):
             items['price'] = price_dict
             yield items
 
-    #北京的页面元素较多
+    # 北京的页面元素较多
     def parse_body_bj(self, response):
 
         print response.url
